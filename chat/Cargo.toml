@@ -1,0 +1,12 @@
+[package]
+name = "chat"
+description = "pythonic chat modules"
+version = "0.0.1"
+edition = "2021"
+
+[dependencies]
+chat-utils      = { path = "../chat-utils" }
+anyhow          = { workspace = true }
+tokio           = { workspace = true }
+once_cell       = { workspace = true }
+inline-python   = "0.12"

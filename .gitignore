@@ -1,0 +1,26 @@
+/target/
+/.vscode/
+/misc/gpt4free-tests/__pycache__/
+/misc/opengpt-tests/__pycache__/
+
+package-lock.json
+
+conf.dhall
+conf.yml
+weekly.yml
+mmm.yml
+giveaway.yml
+
+*.png
+*.w3g
+*.out
+*.hi
+*.o
+hake
+
+# deepseach models
+ds/
+
+# gpt4free stuff
+*.txt
+*.json
