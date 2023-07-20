@@ -51,8 +51,6 @@ pub async fn generate(msg: &str) -> anyhow::Result<String> {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::aitianhu::generate( msg, true, "Amadeus" ).await {
     Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::acytoo::generate( msg, true, "Amadeus" ).await {
-    Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::easychat::generate( msg, true, "Amadeus" ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::yqcloud::generate( msg ) {
@@ -102,8 +100,6 @@ pub async fn chat(msg: &str, bot_name: &str) -> anyhow::Result<String> {
   } else if let Ok(gpt4free_result) = g4f::aichat::generate( msg, true, bot_name ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::aitianhu::generate( msg, true, bot_name ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::acytoo::generate( msg, true, bot_name ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::easychat::generate( msg, true, bot_name ).await {
     Ok(gpt4free_result)

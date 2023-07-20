@@ -4,6 +4,5 @@ pub mod yqcloud;
 pub mod aichat;
 pub mod deepai;
 pub mod getgpt;
-pub mod acytoo;
 pub mod aitianhu;
 pub mod easychat;
