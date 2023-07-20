@@ -1,5 +1,7 @@
 # chat.rs
 
+[![mawa](https://github.com/Miezhiko/chat.rs/actions/workflows/ci.yml/badge.svg)](https://github.com/Miezhiko/chat.rs/actions/workflows/ci.yml)
+
 ```rust
 match command {
   COLORS => {
