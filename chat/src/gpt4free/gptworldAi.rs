@@ -87,3 +87,14 @@ pub async fn generate( prompt: &str
     }, Err(_) => { bail!("Failed to to use gpt4free::gptworldAi now!") }
   }
 }
+
+#[cfg(test)]
+mod world_tests {
+  use super::*;
+  #[tokio::test]
+  async fn world_test() {
+    let chat_response =
+      generate("what gpt version you use?", true, "Fingon").await;
+    assert!(chat_response.is_ok());
+  }
+}

@@ -3,7 +3,6 @@ use crate::{
   personality::get_personality
 };
 
-
 use inline_python::{ python, Context };
 
 use std::collections::VecDeque;
@@ -89,5 +88,16 @@ pub async fn generate( prompt: &str
         bail!("No tokens generated: {:?}", m)
       }
     }, Err(_) => { bail!("Failed to to use gpt4free::deepai now!") }
+  }
+}
+
+#[cfg(test)]
+mod deep_tests {
+  use super::*;
+  #[tokio::test]
+  async fn deep_test() {
+    let chat_response =
+      generate("what gpt version you use?", true, "Fingon").await;
+    assert!(chat_response.is_ok());
   }
 }

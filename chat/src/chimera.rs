@@ -69,6 +69,7 @@ static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
           model="gpt-4",
           messages=messages
         )
+
         rspns = response["choices"]
 
         if not rspns:
@@ -98,5 +99,17 @@ static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
         bail!("No tokens generated: {:?}", m)
       }
     }, Err(_) => { bail!("Failed to to use chimera now!") }
+  }
+}
+
+#[cfg(test)]
+mod chimera_tests {
+  use super::*;
+  #[ignore = "ignore because cargo test is screwing workdir"]
+  #[tokio::test]
+  async fn chimera_test() {
+    let chat_response =
+      generate("what gpt version you use?", true, "Fingon").await;
+    assert!(chat_response.is_ok());
   }
 }

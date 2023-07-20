@@ -39,3 +39,14 @@ pub fn generate(prompt: &str) -> anyhow::Result<String> {
     }, Err(_) => { bail!("Failed to to use gpt4free::theb now!") }
   }
 }
+
+#[cfg(test)]
+mod theb_tests {
+  use super::*;
+  #[test]
+  fn theb_test() {
+    let chat_response =
+      generate("what gpt version you use?");
+    assert!(chat_response.is_ok());
+  }
+}

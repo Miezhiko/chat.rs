@@ -53,3 +53,15 @@ pub fn generate(prompt: &str, model: &str) -> anyhow::Result<String> {
     }, Err(_) => { bail!("Failed to to use poe now!") }
   }
 }
+
+#[cfg(test)]
+mod chimera_tests {
+  use super::*;
+  #[ignore = "ignore because cargo test is screwing workdir"]
+  #[test]
+  fn poe_test() {
+    let chat_response =
+      generate("what gpt version you use?", "beaver");
+    assert!(chat_response.is_ok());
+  }
+}

@@ -91,3 +91,14 @@ pub async fn generate( prompt: &str
     }, Err(_) => { bail!("Failed to to use gpt4free::forefront now!") }
   }
 }
+
+#[cfg(test)]
+mod ff_tests {
+  use super::*;
+  #[tokio::test]
+  async fn ff_test() {
+    let chat_response =
+      generate("what gpt version you use?", true, "Fingon").await;
+    assert!(chat_response.is_ok());
+  }
+}

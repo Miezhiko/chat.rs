@@ -33,3 +33,14 @@ pub fn generate(prompt: &str) -> anyhow::Result<String> {
     }, Err(_) => { bail!("Failed to to use gpt4free::aicolors now!") }
   }
 }
+
+#[cfg(test)]
+mod colour_tests {
+  use super::*;
+  #[test]
+  fn colour_test() {
+    let chat_response =
+      generate("red color");
+    assert!(chat_response.is_ok());
+  }
+}
