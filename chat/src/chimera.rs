@@ -59,7 +59,12 @@ static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
       reslt = False
       try:
         messages.append({"role": "user", "content": prompt})
-        with open("chimera.txt", "r") as file:
+
+        if os.path.isfile("/etc/chat.rs/chimera.txt"):
+            file_path = "/etc/chat.rs/chimera.txt"
+        else:
+            file_path = "chimera.txt"
+        with open(file_path, "r") as file:
           token = file.readline().strip()
 
         openai.api_key = token
@@ -105,7 +110,6 @@ static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
 #[cfg(test)]
 mod chimera_tests {
   use super::*;
-  #[ignore = "ignore because cargo test is screwing workdir"]
   #[tokio::test]
   async fn chimera_test() {
     let chat_response =

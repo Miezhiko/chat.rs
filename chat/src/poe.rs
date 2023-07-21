@@ -28,7 +28,11 @@ pub fn generate(prompt: &str, model: &str) -> anyhow::Result<String> {
 
       system += "\n prompt: "
       try:
-        token = random.choice(open("tokens.txt", "r").read().splitlines())
+        if os.path.isfile("/etc/chat.rs/tokens.txt"):
+            file_path = "/etc/chat.rs/tokens.txt"
+        else:
+            file_path = "tokens.txt"
+        token = random.choice(open(file_path, "r").read().splitlines())
         client = poe.Client(token)
 
         completion = client.send_message(model, system + prompt, with_chat_break=True)
@@ -57,7 +61,6 @@ pub fn generate(prompt: &str, model: &str) -> anyhow::Result<String> {
 #[cfg(test)]
 mod chimera_tests {
   use super::*;
-  #[ignore = "ignore because cargo test is screwing workdir"]
   #[test]
   fn poe_test() {
     let chat_response =
