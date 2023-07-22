@@ -59,7 +59,7 @@ pub fn generate(prompt: &str, model: &str) -> anyhow::Result<String> {
 }
 
 #[cfg(test)]
-mod chimera_tests {
+mod poe_tests {
   use super::*;
   #[test]
   fn poe_test() {
