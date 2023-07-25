@@ -68,7 +68,7 @@ static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
           token = file.readline().strip()
 
         openai.api_key = token
-        openai.api_base = "https://chimeragpt.adventblocks.cc/v1"
+        openai.api_base = "https://chimeragpt.adventblocks.cc/api/v1"
 
         response = openai.ChatCompletion.create(
           model="gpt-4",
