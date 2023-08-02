@@ -46,7 +46,13 @@ pub fn generate(prompt: &str) -> anyhow::Result<String> {
         , c.get::<String>("result") )
   }) {
     Ok((r,m)) => {
-      if r { Ok(m) } else {
+      if r {
+        if m.contains("Please reduce the length of the messages or completion") {
+          bail!("No enough tokens! {:?}", m)
+        } else {
+          Ok(m)
+        }
+      } else {
         bail!("No tokens generated: {:?}", m)
       }
     }, Err(_) => { bail!("Failed to to use opengpt::chatbase now!") }
