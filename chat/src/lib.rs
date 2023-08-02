@@ -13,8 +13,6 @@ pub async fn generate(msg: &str) -> anyhow::Result<String> {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = opengpt::chatbase::generate( msg ) {
     Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::forefront::generate( msg, true, "Amadeus" ) {
-    Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::chatgpt_ai::generate( msg, true, "Amadeus" ) {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = gpt4free::gptworldAi::generate( msg, true, "Amadeus" ).await {
@@ -35,8 +33,6 @@ pub async fn chat(msg: &str, bot_name: &str) -> anyhow::Result<String> {
     || msg.contains("PLEASE"));
 
   if let Ok(gpt4free_result)        = chimera::generate( msg, fmode, bot_name ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::forefront::generate( msg, true, bot_name ) {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::chatgpt_ai::generate( msg, true, bot_name ) {
     Ok(gpt4free_result)

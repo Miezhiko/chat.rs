@@ -76,5 +76,6 @@ mod chatgpt_ai_tests {
     let chat_response =
       generate("what gpt version you use?", true, "Fingon");
     assert!(chat_response.is_ok());
+    assert!(!chat_response.unwrap().contains("is not working"));
   }
 }
