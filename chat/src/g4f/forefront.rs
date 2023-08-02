@@ -16,6 +16,7 @@ pub fn generate( prompt: &str
     let c = Context::new();
     c.set("is_russian", russian);
     c.set("fmode", fmode);
+    c.set("prompt", prompt);
     c.set("PERSONALITY", get_personality(personality));
     c.run(python! {
       import sys
@@ -65,7 +66,7 @@ pub fn generate( prompt: &str
 #[cfg(test)]
 mod ff_tests {
   use super::*;
-  #[tokio::test]
+  #[test]
   fn ff_test() {
     let chat_response =
       generate("what gpt version you use?", true, "Fingon");
