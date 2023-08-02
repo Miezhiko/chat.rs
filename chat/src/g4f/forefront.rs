@@ -1,36 +1,19 @@
-use crate::{
-  constants,
-  personality::get_personality
-};
-
+use crate::personality::get_personality;
 
 use inline_python::{ python, Context };
 
-use std::collections::VecDeque;
 use std::panic::catch_unwind;
-
 use anyhow::bail;
-
-use once_cell::sync::Lazy;
-
-use tokio::sync::Mutex;
 
 use chat_utils::help::lang;
 
-static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
-  Lazy::new(|| Mutex::new( VecDeque::with_capacity(1) ));
-
-pub async fn generate( prompt: &str
-                     , fmode: bool
-                     , personality: &str
-                     ) -> anyhow::Result<String> {
-  let mut msg_lock = MSGHIST.lock().await;
-  let tmp_msg = msg_lock.as_slices();
+pub fn generate( prompt: &str
+               , fmode: bool
+               , personality: &str
+               ) -> anyhow::Result<String> {
   let russian = lang::is_russian(prompt);
   match catch_unwind(|| {
     let c = Context::new();
-    c.set("prompt", prompt);
-    c.set("old_messages", tmp_msg);
     c.set("is_russian", russian);
     c.set("fmode", fmode);
     c.set("PERSONALITY", get_personality(personality));
@@ -49,11 +32,6 @@ pub async fn generate( prompt: &str
       else:
         systemContext += ", you reply in English"
       messages = [{"role": "system", "content": systemContext}]
-      if not fmode and old_messages:
-        for tup in old_messages:
-          if tup and len(tup) == 2:
-            messages.append({"role": "user", "content": tup[0]})
-            messages.append({"role": "assistant", "content": tup[1]})
       try:
         messages.append({"role": "user", "content": prompt})
         rspns = g4f.ChatCompletion.create( model=g4f.Model.gpt_4, messages=messages
@@ -76,14 +54,6 @@ pub async fn generate( prompt: &str
   }) {
     Ok((r,m)) => {
       if r {
-        if !m.is_empty() {
-          if msg_lock.len() == msg_lock.capacity() {
-            msg_lock.pop_front();
-          }
-          if (prompt.len() + m.len()) < constants::HISTORY_LIMIT {
-            msg_lock.push_back((prompt.to_string(), m.clone()));
-          }
-        }
         Ok(m)
       } else {
         bail!("No tokens generated: {:?}", m)
@@ -96,9 +66,9 @@ pub async fn generate( prompt: &str
 mod ff_tests {
   use super::*;
   #[tokio::test]
-  async fn ff_test() {
+  fn ff_test() {
     let chat_response =
-      generate("what gpt version you use?", true, "Fingon").await;
+      generate("what gpt version you use?", true, "Fingon");
     assert!(chat_response.is_ok());
   }
 }
