@@ -16,13 +16,7 @@
 
 ```rust
 match command {
-  COLORS => {
-    if let Ok(gpt4free_result) =
-      chat::gpt4free::aicolors::generate( payload )
-    {
-      return Some(gpt4free_result);
-    }
-  }, GENERATE => {
+  GENERATE => {
     if let Ok(gpt4free_result) =
       chat::generate( payload )
     {

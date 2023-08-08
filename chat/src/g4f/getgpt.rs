@@ -56,7 +56,7 @@ pub async fn generate( prompt: &str
             messages.append({"role": "assistant", "content": tup[1]})
       try:
         messages.append({"role": "user", "content": prompt})
-        rspns = g4f.ChatCompletion.create( model=g4f.Model.gpt_4, messages=messages
+        rspns = g4f.ChatCompletion.create( model=g4f.models.gpt_4, messages=messages
                                          , stream=False
                                          , provider=g4f.Provider.GetGpt )
         if not rspns:
