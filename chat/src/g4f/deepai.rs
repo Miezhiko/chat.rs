@@ -57,9 +57,9 @@ pub async fn generate( prompt: &str
         messages.append({"role": "user", "content": prompt})
         rspns = g4f.ChatCompletion.create( model=g4f.models.gpt_4, messages=messages
                                          , stream=False
-                                         , provider=g4f.Provider.GetGpt )
+                                         , provider=g4f.Provider.DeepAi )
         if not rspns:
-          result = "getgpt: Sorry, I can't generate a response right now."
+          result = "DeepAi: Sorry, I can't generate a response right now."
           reslt = False
         else:
           reslt = True
@@ -87,15 +87,15 @@ pub async fn generate( prompt: &str
       } else {
         bail!("No tokens generated: {:?}", m)
       }
-    }, Err(_) => { bail!("Failed to to use gpt4free::getgpt now!") }
+    }, Err(_) => { bail!("Failed to to use gpt4free::DeepAi now!") }
   }
 }
 
 #[cfg(test)]
-mod gg_tests {
+mod deepai_tests {
   use super::*;
   #[tokio::test]
-  async fn gg_test() {
+  async fn deepai_test() {
     let chat_response =
       generate("what gpt version you use?", true, "Fingon").await;
     assert!(chat_response.is_ok());
