@@ -41,7 +41,7 @@ pub fn generate( prompt: &str
       try:
         messages.append({"role": "user", "content": prompt})
         rspns = g4f.ChatCompletion.create( model=g4f.models.gpt_4, messages=messages
-                                         , stream=False
+                                         , stream=False, auth="jwt"
                                          , provider=g4f.Provider.ChatgptAi )
         if not rspns:
           result = "ChatgptAi: Sorry, I can't generate a response right now."

@@ -57,9 +57,9 @@ pub async fn generate( prompt: &str
         messages.append({"role": "user", "content": prompt})
         rspns = g4f.ChatCompletion.create( model=g4f.models.gpt_4, messages=messages
                                          , stream=False, auth="jwt"
-                                         , provider=g4f.Provider.opchatgpts )
+                                         , provider=g4f.Provider.EasyChat )
         if not rspns:
-          result = "opchatgpts: Sorry, I can't generate a response right now."
+          result = "EasyChat: Sorry, I can't generate a response right now."
           reslt = False
         else:
           reslt = True
@@ -87,15 +87,15 @@ pub async fn generate( prompt: &str
       } else {
         bail!("No tokens generated: {:?}", m)
       }
-    }, Err(_) => { bail!("Failed to to use g4f::opchatgpts now!") }
+    }, Err(_) => { bail!("Failed to to use gpt4free::EasyChat now!") }
   }
 }
 
 #[cfg(test)]
-mod opchatgpts_tests {
+mod easy_tests {
   use super::*;
   #[tokio::test]
-  async fn opchatgpts_test() {
+  async fn easy_test() {
     let chat_response =
       generate("what gpt version you use?", true, "Fingon").await;
     assert!(chat_response.is_ok());
