@@ -18,7 +18,7 @@
 match command {
   GENERATE => {
     if let Ok(gpt4free_result) =
-      chat::generate( payload )
+      chat::generate( payload, "bot name", false )
     {
       return Some(gpt4free_result);
     }

@@ -8,39 +8,17 @@ pub mod opengpt;
 pub mod g4f;
 pub mod chimera;
 
-pub async fn generate(msg: &str) -> anyhow::Result<String> {
-  if let Ok(gpt4free_result)        = chimera::generate( msg, false, "Amadeus" ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::chatgpt_ai::generate( msg, false, "Amadeus" ) {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = opengpt::chatbase::generate( msg ) {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::deepai::generate( msg, false, "Amadeus" ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::ails::generate( msg, false, "Amadeus" ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::easy::generate( msg, false, "Amadeus" ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::opchatgpts::generate( msg, false, "Amadeus" ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = gpt4free::gptworldAi::generate( msg, false, "Amadeus" ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::getgpt::generate( msg, false, "Amadeus" ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = gpt4free::theb::generate( msg ) {
-    Ok(gpt4free_result)
-  // } else if let Ok(gpt4free_result) = chimera::generate( msg, false, "Amadeus" ).await {
-  //   Ok(gpt4free_result)
-  } else { Err(anyhow!("Failed to generate chat response")) }
-}
-
-pub async fn chat(msg: &str, bot_name: &str) -> anyhow::Result<String> {
+pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<String> {
   let fmode =
-    ! (msg.contains("please")
-    || msg.contains("пожалуйста")
-    || msg.contains("Please")
-    || msg.contains("Пожалуйста")
-    || msg.contains("PLEASE"));
+    if fancy {
+      ! (msg.contains("please")
+      || msg.contains("пожалуйста")
+      || msg.contains("Please")
+      || msg.contains("Пожалуйста")
+      || msg.contains("PLEASE"))
+    } else {
+      false
+    };
 
   if let Ok(gpt4free_result)        = chimera::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
@@ -62,7 +40,9 @@ pub async fn chat(msg: &str, bot_name: &str) -> anyhow::Result<String> {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = gpt4free::theb::generate( msg ) {
     Ok(gpt4free_result)
-  // } else if let Ok(gpt4free_result) = chimera::generate( msg, fmode, bot_name ).await {
-  //   Ok(gpt4free_result)
   } else { Err(anyhow!("Failed to generate chat response")) }
+}
+
+pub async fn chat(msg: &str, bot_name: &str) -> anyhow::Result<String> {
+  generate(msg, bot_name, true).await
 }
