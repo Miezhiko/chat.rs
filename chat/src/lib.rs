@@ -21,7 +21,16 @@ pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<
       false
     };
 
-  if let Ok(gpt4free_result)        = chimera::generate( msg, fmode, bot_name ).await {
+  let mut reset = false;
+  let prompt =
+    if msg.contains("--reset") {
+      reset = true;
+      msg.replace(" --reset ", "")
+         .replace("--reset ", "")
+         .replace("--reset", "")
+    } else { String::from(msg) };
+
+  if let Ok(gpt4free_result)        = chimera::generate( prompt.as_str(), fmode, bot_name, reset ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::getgpt::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)

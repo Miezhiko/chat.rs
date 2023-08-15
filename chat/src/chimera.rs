@@ -25,8 +25,12 @@ static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
   pub async fn generate( prompt: &str
                        , fmode: bool
                        , personality: &str
+                       , reset: bool
                        ) -> anyhow::Result<String> {
   let mut msg_lock = MSGHIST.lock().await;
+  if reset {
+    msg_lock.clear();
+  }
   let tmp_msg = msg_lock.as_slices();
   let russian = lang::is_russian(prompt);
   match catch_unwind(|| {
