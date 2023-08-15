@@ -20,7 +20,7 @@ pub fn get_chimera_personality(bot_name: &str) -> String {
 }
 
 static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
-  Lazy::new(|| Mutex::new( VecDeque::with_capacity(2) ));
+  Lazy::new(|| Mutex::new( VecDeque::with_capacity(1) ));
 
   pub async fn generate( prompt: &str
                        , fmode: bool
@@ -51,7 +51,7 @@ static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
       else:
         systemContext += ", you reply in English"
       messages = [{"role": "system", "content": systemContext}]
-      if old_messages:
+      if if not fmode and old_messages:
         for tup in old_messages:
           if tup and len(tup) == 2:
             messages.append({"role": "user", "content": tup[0]})
