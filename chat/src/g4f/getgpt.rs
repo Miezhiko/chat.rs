@@ -62,8 +62,11 @@ pub async fn generate( prompt: &str
           result = "getgpt: Sorry, I can't generate a response right now."
           reslt = False
         else:
-          reslt = True
           result = rspns
+          if result == "I'm sorry, but I can't assist with that.":
+            reslt = False
+          else:
+            reslt = True
       except OSError as err:
         result = ("OS Error! {0}".format(err))
         reslt = False

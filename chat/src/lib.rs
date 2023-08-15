@@ -23,11 +23,11 @@ pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<
 
   if let Ok(gpt4free_result)        = chimera::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::getgpt::generate( msg, fmode, bot_name ).await {
-    Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::deepai::generate( msg, true, bot_name ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::opchatgpts::generate( msg, fmode, bot_name ).await {
+    Ok(gpt4free_result)
+  } else if let Ok(gpt4free_result) = g4f::getgpt::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::ails::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
