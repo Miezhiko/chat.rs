@@ -1,14 +1,9 @@
-import g4f
 import sys
-
-
 import os
 import json
 import time
 import subprocess
 
-import sys
-import json
 import datetime
 import urllib.parse
 
@@ -42,7 +37,7 @@ def create_completion(model: str, messages: list, stream: bool):
             
             yield line.decode("utf-8") 
 
-response = "".join(create_completion(model="gpt-4", #g4f.ChatCompletion.create(model="gpt-4", 
+response = "".join(create_completion(model="gpt-4",
                   messages=[{"role": "user", 
                       "content": "Who are you? What version of GPT you use?"}], 
                   stream=False))
