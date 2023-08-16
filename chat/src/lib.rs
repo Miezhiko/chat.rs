@@ -21,7 +21,9 @@ pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<
       false
     };
 
-  if let Ok(gpt4free_result)        = chimera::generate( msg, fmode, bot_name ).await {
+  if let Ok(gpt4free_result)        = chimera::generate( msg, fmode, bot_name, "llama-2-70b-chat" ).await {
+    Ok(gpt4free_result)
+  } else if let Ok(gpt4free_result) = chimera::generate( msg, fmode, bot_name, "gpt-3.5-turbo-16k" ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::deepai::generate( msg, true, bot_name ).await {
     Ok(gpt4free_result)

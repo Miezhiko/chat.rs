@@ -25,6 +25,7 @@ static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
   pub async fn generate( prompt: &str
                        , fmode: bool
                        , personality: &str
+                       , model: &str
                        ) -> anyhow::Result<String> {
   let mut msg_lock = MSGHIST.lock().await;
   let tmp_msg = msg_lock.as_slices();
@@ -36,6 +37,7 @@ static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
     c.set("is_russian", russian);
     c.set("fmode", fmode);
     c.set("PERSONALITY", get_chimera_personality(personality));
+    c.set("model_name", model);
     c.run(python! {
       import sys
       import os
@@ -71,7 +73,7 @@ static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
         openai.api_base = "https://chimeragpt.adventblocks.cc/api/v1"
 
         response = openai.ChatCompletion.create(
-          model="gpt-4",
+          model=model_name,
           messages=messages,
           stream=False,
           allow_fallback=True
@@ -115,7 +117,10 @@ mod chimera_tests {
   #[tokio::test]
   async fn chimera_test() {
     let chat_response =
-      generate("what gpt version you use?", true, "Fingon").await;
+      generate( "what gpt version you use?"
+              , true
+              , "Fingon"
+              , "llama-2-70b-chat" ).await;
     assert!(chat_response.is_ok());
   }
 }
