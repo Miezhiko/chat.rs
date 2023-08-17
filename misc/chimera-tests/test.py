@@ -12,7 +12,7 @@ openai.api_key = token
 openai.api_base = "https://chimeragpt.adventblocks.cc/api/v1"
 
 messages=[
-   {'role': 'user', 'content': "привет?"},
+   {'role': 'user', 'content': "Где я?"},
 ]
 
 response = openai.ChatCompletion.create(
