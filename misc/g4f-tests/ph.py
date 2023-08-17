@@ -17,7 +17,7 @@ supports_stream = True
 
 def create_completion(model: str, messages: list, stream: bool):
 
-    path = "/data/contrib/rust/Amadeus/misc"
+    path = "/data/contrib/rust/chat.rs/misc"
     config = json.dumps({
         "model": model,
         "messages": messages}, separators=(",", ":"))
@@ -38,8 +38,11 @@ def create_completion(model: str, messages: list, stream: bool):
             yield line.decode("utf-8") 
 
 response = "".join(create_completion(model="gpt-4",
+                  stream=False,
                   messages=[{"role": "user", 
-                      "content": "Who are you? What version of GPT you use?"}], 
-                  stream=False))
+                      "content": "I have a nice riddle for you. Can you find the the mistake?\
+\
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73"}]
+))
 
 print(response)

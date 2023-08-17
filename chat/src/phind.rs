@@ -24,9 +24,7 @@ pub async fn generate( prompt: &str
       import urllib.parse
       
       from curl_cffi import requests
-      
-      from g4f.typing import sha256, Dict, get_type_hints
-      
+
       url = "https://phind.com"
       model = ["gpt-4"]
       supports_stream = False

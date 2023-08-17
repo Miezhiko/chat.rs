@@ -57,7 +57,7 @@ pub async fn generate( prompt: &str
         messages.append({"role": "user", "content": prompt})
         rspns = g4f.ChatCompletion.create( model=g4f.models.gpt_4, messages=messages
                                          , stream=False, auth="jwt"
-                                         , provider=g4f.Provider.opchatgpts )
+                                         , provider=g4f.Provider.Opchatgpts )
         if not rspns:
           result = "opchatgpts: Sorry, I can't generate a response right now."
           reslt = False
