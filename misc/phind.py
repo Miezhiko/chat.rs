@@ -37,7 +37,6 @@ headers = {
     'Sec-Fetch-Dest': 'empty'
 }
 
-
 def output(chunk):
     try:
         if b'PHIND_METADATA' in chunk:

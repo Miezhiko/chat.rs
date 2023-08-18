@@ -33,6 +33,8 @@ pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::ails::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
+  } else if let Ok(gpt4free_result) = g4f::yqcloud::generate( msg, fmode, bot_name ).await {
+    Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = phind::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = gpt4free::theb::generate( msg ) {
