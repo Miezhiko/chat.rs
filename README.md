@@ -9,7 +9,7 @@
 - [gpt4free](https://github.com/xtekky/gpt4free)
 - [OpenAI](https://github.com/openai/openai-python)
 - [OpenGPT](https://github.com/uesleibros/OpenGPT) (deprecated, dropped)
-- [gpt4free fork](https://github.com/Masha/gpt4free) (this is optional and will be dropped)
+- [gpt4free fork](https://github.com/Masha/gpt4free) (deprecated, dropped)
 - [ChimeraGPT](https://discord.gg/chimeragpt) access token as `chimera.txt` file
 
 # Silly usage example
