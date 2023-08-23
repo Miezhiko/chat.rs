@@ -3,3 +3,5 @@ pub mod deepai;
 pub mod opchatgpts;
 pub mod ails;
 pub mod yqcloud;
+pub mod acytoo;
+pub mod aichat;
