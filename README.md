@@ -5,7 +5,6 @@
 # Requirements:
 
 - [poe-api](https://github.com/ading2210/poe-api) (deprecated, dropped)
-- [OpenGPT](https://github.com/uesleibros/OpenGPT)
 - [gpt4free](https://github.com/xtekky/gpt4free)
 - [OpenAI](https://github.com/openai/openai-python)
 - [OpenGPT](https://github.com/uesleibros/OpenGPT) (deprecated, dropped)
