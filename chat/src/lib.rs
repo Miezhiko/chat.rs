@@ -19,21 +19,19 @@ pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<
       false
     };
 
-  if let Ok(gpt4free_result)        = chimera::generate( msg, fmode, bot_name, "llama-2-70b-chat" ).await {
+  if let Ok(gpt4free_result)        = chimera::generate( msg, fmode, bot_name, "gpt-3.5-turbo-16k" ).await {
     Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = chimera::generate( msg, fmode, bot_name, "gpt-3.5-turbo-16k" ).await {
+  } else if let Ok(gpt4free_result) = chimera::generate( msg, fmode, bot_name, "llama-2-70b-chat" ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::opchatgpts::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::ails::generate( msg, fmode, bot_name ).await {
-    Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::yqcloud::generate( msg, fmode, bot_name ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::acytoo::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::aichat::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = phind::generate( msg, fmode, bot_name ).await {
+    Ok(gpt4free_result)
+  } else if let Ok(gpt4free_result) = g4f::ails::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::deepai::generate( msg, true, bot_name ).await {
     Ok(gpt4free_result)
@@ -59,20 +57,18 @@ pub async fn generate_all<'a>(msg: &str, bot_name: &str, fancy: bool)
         , chimera::generate( msg, fmode, bot_name, "llama-2-70b-chat" ).await )
       , ( "opchatgpts"
         , g4f::opchatgpts::generate( msg, true, bot_name ).await )
-      , ( "Ails"
-        , g4f::ails::generate( msg, true, bot_name ).await )
       , ( "Phind"
         , phind::generate( msg, fmode, bot_name ).await )
       , ( "Yqcloud"
         , g4f::yqcloud::generate( msg, true, bot_name ).await )
-      , ( "Acytoo"
-        , g4f::acytoo::generate( msg, true, bot_name ).await )
       , ( "Aichat"
         , g4f::aichat::generate( msg, true, bot_name ).await )
       , ( "ChatGPT AI"
         , g4f::chatgpt_ai::generate( msg, fmode, bot_name ) )
       , ( "Deep AI"
         , g4f::deepai::generate( msg, true, bot_name ).await )
+      , ( "Ails"
+        , g4f::ails::generate( msg, true, bot_name ).await )
       , ( "gpt-3.5-turbo-16k"
         , chimera::generate( msg, fmode, bot_name, "gpt-3.5-turbo-16k" ).await )
       ]
