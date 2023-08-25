@@ -31,11 +31,7 @@ pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = phind::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::ails::generate( msg, fmode, bot_name ).await {
-    Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::deepai::generate( msg, true, bot_name ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::chatgpt_ai::generate( msg, fmode, bot_name ) {
     Ok(gpt4free_result)
   } else { Err(anyhow!("Failed to generate chat response")) }
 }
@@ -63,12 +59,8 @@ pub async fn generate_all<'a>(msg: &str, bot_name: &str, fancy: bool)
         , g4f::yqcloud::generate( msg, true, bot_name ).await )
       , ( "Aichat"
         , g4f::aichat::generate( msg, true, bot_name ).await )
-      , ( "ChatGPT AI"
-        , g4f::chatgpt_ai::generate( msg, fmode, bot_name ) )
       , ( "Deep AI"
         , g4f::deepai::generate( msg, true, bot_name ).await )
-      , ( "Ails"
-        , g4f::ails::generate( msg, true, bot_name ).await )
       , ( "gpt-3.5-turbo-16k"
         , chimera::generate( msg, fmode, bot_name, "gpt-3.5-turbo-16k" ).await )
       ]
