@@ -29,6 +29,8 @@ pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::aichat::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
+  } else if let Ok(gpt4free_result) = g4f::wewordle::generate( msg, fmode, bot_name ).await {
+    Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::bloom::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = phind::generate( msg, fmode, bot_name ).await {
@@ -59,8 +61,11 @@ pub async fn generate_all<'a>(msg: &str, bot_name: &str, fancy: bool)
         , phind::generate( msg, fmode, bot_name ).await )
       , ( "Yqcloud"
         , g4f::yqcloud::generate( msg, true, bot_name ).await )
-      , ( "Bloom (Vercel)"
-        , g4f::bloom::generate( msg, true, bot_name ).await )
+      // exclude bloom from multigen because it's very unstable
+      // , ( "Bloom (Vercel)"
+      //  , g4f::bloom::generate( msg, true, bot_name ).await )
+      , ( "Wewordle"
+        , g4f::wewordle::generate( msg, true, bot_name ).await )
       , ( "Aichat"
         , g4f::aichat::generate( msg, true, bot_name ).await )
       , ( "Deep AI"
