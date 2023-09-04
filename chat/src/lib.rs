@@ -28,7 +28,7 @@ pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::wewordle::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::bloom::generate( msg, fmode, bot_name ).await {
+  } else if let Ok(gpt4free_result) = g4f::liaobots::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = phind::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
@@ -62,6 +62,8 @@ pub async fn generate_all<'a>(msg: &str, bot_name: &str, fancy: bool)
         , g4f::wewordle::generate( msg, true, bot_name ).await )
       , ( "Deep AI"
         , g4f::deepai::generate( msg, true, bot_name ).await )
+      , ( "Liaobots"
+        , g4f::liaobots::generate( msg, true, bot_name ).await )
       , ( "gpt-3.5-turbo-16k"
         , chimera::generate( msg, fmode, bot_name, "gpt-3.5-turbo-16k" ).await )
       ]
