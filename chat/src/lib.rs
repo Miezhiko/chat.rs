@@ -20,11 +20,7 @@ pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<
       false
     };
 
-  if let Ok(gpt4free_result)        = chimera::generate( msg, fmode, bot_name, "gpt-3.5-turbo-16k" ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = chimera::generate( msg, fmode, bot_name, "llama-2-70b-chat" ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::yqcloud::generate( msg, fmode, bot_name ).await {
+  if let Ok(gpt4free_result)       = g4f::yqcloud::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::wewordle::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
@@ -39,6 +35,10 @@ pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<
   } else if let Ok(gpt4free_result) = g4f::chatgptai::generate( msg, true, bot_name ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = huggingface::generate( msg ) {
+    Ok(gpt4free_result)
+  } else if let Ok(gpt4free_result) = chimera::generate( msg, fmode, bot_name, "gpt-3.5-turbo-16k" ).await {
+    Ok(gpt4free_result)
+  } else if let Ok(gpt4free_result) = chimera::generate( msg, fmode, bot_name, "llama-2-70b-chat" ).await {
     Ok(gpt4free_result)
   } else { Err(anyhow!("Failed to generate chat response")) }
 }
@@ -56,9 +56,7 @@ pub async fn generate_all<'a>(msg: &str, bot_name: &str, fancy: bool)
       false
     };
 
-  vec![ ( "llama-2-70b-chat"
-        , chimera::generate( msg, fmode, bot_name, "llama-2-70b-chat" ).await )
-      , ( "Phind"
+  vec![ ( "Phind"
         , phind::generate( msg, fmode, bot_name ).await )
       , ( "Yqcloud"
         , g4f::yqcloud::generate( msg, true, bot_name ).await )
@@ -72,8 +70,6 @@ pub async fn generate_all<'a>(msg: &str, bot_name: &str, fancy: bool)
         , g4f::chatgptlogin::generate( msg, true, bot_name ).await )
       , ( "ChatgptAI"
         , g4f::chatgptai::generate( msg, true, bot_name ).await )
-      , ( "gpt-3.5-turbo-16k"
-        , chimera::generate( msg, fmode, bot_name, "gpt-3.5-turbo-16k" ).await )
       ]
 }
 
