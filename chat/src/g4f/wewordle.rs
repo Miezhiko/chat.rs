@@ -1,29 +1,51 @@
 use crate::{
-  constants,
-  personality::get_personality
+  types::Generator,
+  personality::get_personality,
+  constants
 };
 
 use inline_python::{ python, Context };
-
-use std::collections::VecDeque;
 use std::panic::catch_unwind;
 
 use anyhow::bail;
 
+use std::collections::VecDeque;
+
 use once_cell::sync::Lazy;
 
 use tokio::sync::Mutex;
+
+use async_trait::async_trait;
 
 use chat_utils::help::lang;
 
 static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
   Lazy::new(|| Mutex::new( VecDeque::with_capacity(1) ));
 
-pub async fn generate( prompt: &str
-                     , fmode: bool
-                     , personality: &str
-                     ) -> anyhow::Result<String> {
-  let mut msg_lock = MSGHIST.lock().await;
+pub struct WewordleGenerator;
+
+#[async_trait]
+impl Generator for WewordleGenerator {
+  fn name<'a>( &self ) -> &'a str {
+    "Wewordle"
+  }
+  async fn call( &self
+               , prompt: &str
+               , fmode: bool
+               , personality: &str )
+    -> anyhow::Result<String> {
+    generate( prompt
+            , fmode, personality
+            , &MSGHIST ).await
+  }
+}
+
+async fn generate( prompt: &str
+                 , fmode: bool
+                 , personality: &str
+                 , msghist: &Lazy<Mutex<VecDeque<(String, String)>>>
+                 ) -> anyhow::Result<String> {
+  let mut msg_lock = msghist.lock().await;
   let tmp_msg = msg_lock.as_slices();
   let russian = lang::is_russian(prompt);
   match catch_unwind(|| {
@@ -56,7 +78,7 @@ pub async fn generate( prompt: &str
       try:
         messages.append({"role": "user", "content": prompt})
         rspns = g4f.ChatCompletion.create( model=g4f.models.gpt_4, messages=messages
-                                         , stream=False, auth="cookies"
+                                         , stream=False, auth="jwt"
                                          , provider=g4f.Provider.Wewordle )
         if not rspns:
           result = "Wewordle: Sorry, I can't generate a response right now."
@@ -96,8 +118,9 @@ mod wewordle_tests {
   use super::*;
   #[tokio::test]
   async fn wewordle_test() {
+    let gen = WewordleGenerator;
     let chat_response =
-      generate("what gpt version you use?", true, "Fingon").await;
+      gen.call("what gpt version you use?", true, "Fingon").await;
     assert!(chat_response.is_ok());
     assert!(!chat_response.unwrap().contains("is not working"));
   }

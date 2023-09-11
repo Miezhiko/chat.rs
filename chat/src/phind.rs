@@ -1,16 +1,33 @@
+use crate::types::Generator;
+
 use inline_python::{ python, Context };
 
 use std::panic::catch_unwind;
 
+use async_trait::async_trait;
+
 use anyhow::bail;
+
+pub struct PhindGenerator;
+
+#[async_trait]
+impl Generator for PhindGenerator {
+  fn name<'a>( &self ) -> &'a str {
+    "Phind"
+  }
+  async fn call(&self, prompt: &str, fmode: bool, personality: &str)
+    -> anyhow::Result<String> {
+    generate(prompt, fmode, personality).await
+  }
+}
 
 // TODO: pass personality
 // TODO: fix hardcoded phind.py path
 // TODO: refactor python code
-pub async fn generate( prompt: &str
-                     , _fmode: bool
-                     , _personality: &str
-                     ) -> anyhow::Result<String> {
+async fn generate( prompt: &str
+                 , _fmode: bool
+                 , _personality: &str
+                 ) -> anyhow::Result<String> {
   match catch_unwind(|| {
     let c = Context::new();
     c.set("prompt", prompt);

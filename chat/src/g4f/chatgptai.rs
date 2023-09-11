@@ -1,29 +1,51 @@
 use crate::{
-  constants,
-  personality::get_personality
+  types::Generator,
+  personality::get_personality,
+  constants
 };
 
 use inline_python::{ python, Context };
-
-use std::collections::VecDeque;
 use std::panic::catch_unwind;
 
 use anyhow::bail;
 
+use std::collections::VecDeque;
+
 use once_cell::sync::Lazy;
 
 use tokio::sync::Mutex;
+
+use async_trait::async_trait;
 
 use chat_utils::help::lang;
 
 static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
   Lazy::new(|| Mutex::new( VecDeque::with_capacity(1) ));
 
-pub async fn generate( prompt: &str
-                     , fmode: bool
-                     , personality: &str
-                     ) -> anyhow::Result<String> {
-  let mut msg_lock = MSGHIST.lock().await;
+pub struct ChatgptAiGenerator;
+
+#[async_trait]
+impl Generator for ChatgptAiGenerator {
+  fn name<'a>( &self ) -> &'a str {
+    "ChatgptAi"
+  }
+  async fn call( &self
+               , prompt: &str
+               , fmode: bool
+               , personality: &str )
+    -> anyhow::Result<String> {
+    generate( prompt
+            , fmode, personality
+            , &MSGHIST ).await
+  }
+}
+
+async fn generate( prompt: &str
+                 , fmode: bool
+                 , personality: &str
+                 , msghist: &Lazy<Mutex<VecDeque<(String, String)>>>
+                 ) -> anyhow::Result<String> {
+  let mut msg_lock = msghist.lock().await;
   let tmp_msg = msg_lock.as_slices();
   let russian = lang::is_russian(prompt);
   match catch_unwind(|| {
@@ -87,7 +109,7 @@ pub async fn generate( prompt: &str
       } else {
         bail!("No tokens generated: {:?}", m)
       }
-    }, Err(_) => { bail!("Failed to to use gpt4free::ChatgptAi now!") }
+    }, Err(_) => { bail!("Failed to to use ChatgptAi now!") }
   }
 }
 
@@ -96,8 +118,9 @@ mod chatgptai_tests {
   use super::*;
   #[tokio::test]
   async fn chatgptai_test() {
+    let gen = ChatgptAiGenerator;
     let chat_response =
-      generate("what gpt version you use?", true, "Fingon").await;
+      gen.call("what gpt version you use?", true, "Fingon").await;
     assert!(chat_response.is_ok());
     assert!(!chat_response.unwrap().contains("is not working"));
   }

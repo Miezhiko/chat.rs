@@ -36,3 +36,39 @@ test g4f::aitianhu::aitianhu_tests::aitianhu_test ... ok
 test phind::phind_tests::phind_test ... ok
 test g4f::chatgptlogin::chatgptlogin_tests::chatgptlogin_test ... ok
 ```
+
+# Nothing
+
+```rust
+static GENERATORS: Lazy<Vec<Arc<dyn Generator + Send + Sync>>> =
+  Lazy::new(|| {
+    vec![ Arc::new( g4f::chatbase::ChatBaseGenerator )
+        , Arc::new( g4f::wewordle::WewordleGenerator )
+        , Arc::new( g4f::yqcloud::YqcloudGenerator )
+        , Arc::new( g4f::chatgptlogin::ChatgptLoginGenerator )
+        , Arc::new( phind::PhindGenerator)
+        , Arc::new( g4f::aitianhu::AItianhuGenerator )
+        , Arc::new( g4f::codelinkava::CodeLinkAvaGenerator )
+        , Arc::new( g4f::deepai::DeepAiGenerator )
+        , Arc::new( g4f::chatgptai::ChatgptAiGenerator )
+        ]
+  });
+pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<String> {
+  for gen in &*GENERATORS {
+    if let Ok(result) = gen.call(msg, fancy, bot_name).await {
+      return Ok(result);
+    }
+  }
+  Err( anyhow::anyhow!("All generators failed") )
+}
+
+pub async fn generate_all<'a>(msg: &str, bot_name: &str, fancy: bool)
+                                -> Vec<(&'a str, anyhow::Result<String>)> {
+  let genz = (&*GENERATORS).into_iter().map(
+    |gen| async move { ( gen.name()
+                       , gen.call(msg, fancy, bot_name).await )
+                     }
+  );
+  future::join_all(genz).await
+}
+```

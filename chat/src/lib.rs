@@ -1,12 +1,37 @@
-#[macro_use] extern crate anyhow;
+#![feature(async_closure)]
+
+extern crate anyhow;
 
 mod personality;
 mod constants;
 
+pub mod types;
 pub mod g4f;
 pub mod chimera;
 pub mod phind;
 pub mod huggingface;
+
+use crate::types::Generator;
+
+use std::sync::Arc;
+
+use futures::future;
+
+use once_cell::sync::Lazy;
+
+static GENERATORS: Lazy<Vec<Arc<dyn Generator + Send + Sync>>> =
+  Lazy::new(|| {
+    vec![ Arc::new( g4f::chatbase::ChatBaseGenerator )
+        , Arc::new( g4f::wewordle::WewordleGenerator )
+        , Arc::new( g4f::yqcloud::YqcloudGenerator )
+        , Arc::new( g4f::chatgptlogin::ChatgptLoginGenerator )
+        , Arc::new( phind::PhindGenerator)
+        , Arc::new( g4f::aitianhu::AItianhuGenerator )
+        , Arc::new( g4f::codelinkava::CodeLinkAvaGenerator )
+        , Arc::new( g4f::deepai::DeepAiGenerator )
+        , Arc::new( g4f::chatgptai::ChatgptAiGenerator )
+        ]
+  });
 
 pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<String> {
   let fmode =
@@ -20,32 +45,13 @@ pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<
       false
     };
 
+  for gen in &*GENERATORS {
+    if let Ok(result) = gen.call(msg, fmode, bot_name).await {
+      return Ok(result);
+    }
+  }
 
-  if let Ok(gpt4free_result)        = g4f::wewordle::generate( msg, fmode, bot_name ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::chatbase::generate( msg, fmode, bot_name ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::yqcloud::generate( msg, fmode, bot_name ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = phind::generate( msg, fmode, bot_name ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::aitianhu::generate( msg, true, bot_name ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::deepai::generate( msg, true, bot_name ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::chatgptlogin::generate( msg, true, bot_name ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::chatgptai::generate( msg, true, bot_name ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::codelinkava::generate( msg, true, bot_name ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = huggingface::generate( msg ) {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = chimera::generate( msg, fmode, bot_name, "gpt-3.5-turbo-16k" ).await {
-    Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = chimera::generate( msg, fmode, bot_name, "llama-2-70b-chat" ).await {
-    Ok(gpt4free_result)
-  } else { Err(anyhow!("Failed to generate chat response")) }
+  Err( anyhow::anyhow!("All generators failed") )
 }
 
 pub async fn generate_all<'a>(msg: &str, bot_name: &str, fancy: bool)
@@ -61,25 +67,13 @@ pub async fn generate_all<'a>(msg: &str, bot_name: &str, fancy: bool)
       false
     };
 
-  vec![ ( "Phind"
-        , phind::generate( msg, fmode, bot_name ).await )
-      , ( "Yqcloud"
-        , g4f::yqcloud::generate( msg, true, bot_name ).await )
-      , ( "Wewordle"
-        , g4f::wewordle::generate( msg, true, bot_name ).await )
-      , ( "ChatBase"
-        , g4f::chatbase::generate( msg, true, bot_name ).await )
-      , ( "AItianhu"
-        , g4f::aitianhu::generate( msg, true, bot_name ).await )
-      , ( "Deep AI"
-        , g4f::deepai::generate( msg, true, bot_name ).await )
-      , ( "Chatgpt Login"
-        , g4f::chatgptlogin::generate( msg, true, bot_name ).await )
-      , ( "ChatgptAI"
-        , g4f::chatgptai::generate( msg, true, bot_name ).await )
-      , ( "Code Link Ava"
-        , g4f::codelinkava::generate( msg, true, bot_name ).await )
-      ]
+  let genz = (&*GENERATORS).into_iter().map(
+    |gen| async move { ( gen.name()
+                       , gen.call(msg, fmode, bot_name).await )
+                     }
+  );
+
+  future::join_all(genz).await
 }
 
 pub async fn chat(msg: &str, bot_name: &str) -> anyhow::Result<String> {
