@@ -20,9 +20,12 @@ pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<
       false
     };
 
-  if let Ok(gpt4free_result)       = g4f::yqcloud::generate( msg, fmode, bot_name ).await {
+
+  if let Ok(gpt4free_result)        = g4f::wewordle::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
-  } else if let Ok(gpt4free_result) = g4f::wewordle::generate( msg, fmode, bot_name ).await {
+  } else if let Ok(gpt4free_result) = g4f::chatbase::generate( msg, fmode, bot_name ).await {
+    Ok(gpt4free_result)
+  } else if let Ok(gpt4free_result) = g4f::yqcloud::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = phind::generate( msg, fmode, bot_name ).await {
     Ok(gpt4free_result)
@@ -33,6 +36,8 @@ pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<
   } else if let Ok(gpt4free_result) = g4f::chatgptlogin::generate( msg, true, bot_name ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = g4f::chatgptai::generate( msg, true, bot_name ).await {
+    Ok(gpt4free_result)
+  } else if let Ok(gpt4free_result) = g4f::codelinkava::generate( msg, true, bot_name ).await {
     Ok(gpt4free_result)
   } else if let Ok(gpt4free_result) = huggingface::generate( msg ) {
     Ok(gpt4free_result)
@@ -62,6 +67,8 @@ pub async fn generate_all<'a>(msg: &str, bot_name: &str, fancy: bool)
         , g4f::yqcloud::generate( msg, true, bot_name ).await )
       , ( "Wewordle"
         , g4f::wewordle::generate( msg, true, bot_name ).await )
+      , ( "ChatBase"
+        , g4f::chatbase::generate( msg, true, bot_name ).await )
       , ( "AItianhu"
         , g4f::aitianhu::generate( msg, true, bot_name ).await )
       , ( "Deep AI"
@@ -70,6 +77,8 @@ pub async fn generate_all<'a>(msg: &str, bot_name: &str, fancy: bool)
         , g4f::chatgptlogin::generate( msg, true, bot_name ).await )
       , ( "ChatgptAI"
         , g4f::chatgptai::generate( msg, true, bot_name ).await )
+      , ( "Code Link Ava"
+        , g4f::codelinkava::generate( msg, true, bot_name ).await )
       ]
 }
 

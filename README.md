@@ -9,7 +9,7 @@
 - [OpenAI](https://github.com/openai/openai-python)
 - [OpenGPT](https://github.com/uesleibros/OpenGPT) (deprecated, dropped)
 - [gpt4free fork](https://github.com/Masha/gpt4free) (deprecated, dropped)
-- [ChimeraGPT](https://discord.gg/chimeragpt) access token as `chimera.txt` file
+- [ChimeraGPT](https://discord.gg/chimeragpt) access token as `chimera.txt` file (dead)
 
 # Silly usage example
 
@@ -24,13 +24,15 @@ if let Ok(gpt4free_result) =
 # Current state
 
 ```bash
+test chimera::chimera_tests::chimera_test ... ignored
+test g4f::yqcloud::yqcloud_tests::yqcloud_test ... ok
 test huggingface::huggingface_tests::huggingface_test ... ok
 test g4f::wewordle::wewordle_tests::wewordle_test ... ok
-test g4f::aitianhu::aitianhu_tests::aitianhu_test ... ok
-test g4f::chatgptai::chatgptai_tests::chatgptai_test ... ok
-test g4f::yqcloud::yqcloud_tests::yqcloud_test ... ok
-test g4f::chatgptlogin::chatgptlogin_tests::chatgptlogin_test ... ok
-test chimera::chimera_tests::chimera_test ... ok
-test phind::phind_tests::phind_test ... ok
 test g4f::deepai::deepai_tests::deepai_test ... ok
+test g4f::chatgptai::chatgptai_tests::chatgptai_test ... ok
+test g4f::chatbase::chatbase_tests::chatbase_test ... ok
+test g4f::codelinkava::codelinkava_tests::codelinkava_test ... ok
+test g4f::aitianhu::aitianhu_tests::aitianhu_test ... ok
+test phind::phind_tests::phind_test ... ok
+test g4f::chatgptlogin::chatgptlogin_tests::chatgptlogin_test ... ok
 ```
