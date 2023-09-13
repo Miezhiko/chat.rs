@@ -25,16 +25,17 @@ if let Ok(gpt4free_result) =
 
 ```bash
 test chimera::chimera_tests::chimera_test ... ignored
-test g4f::yqcloud::yqcloud_tests::yqcloud_test ... ok
-test huggingface::huggingface_tests::huggingface_test ... ok
-test g4f::wewordle::wewordle_tests::wewordle_test ... ok
-test g4f::deepai::deepai_tests::deepai_test ... ok
-test g4f::chatgptai::chatgptai_tests::chatgptai_test ... ok
 test g4f::chatbase::chatbase_tests::chatbase_test ... ok
+test g4f::deepai::deepai_tests::deepai_test ... ok
+test g4f::aivvm::aivvm_tests::aivvm_test ... ok
+test huggingface::huggingface_tests::huggingface_test ... ok
+test g4f::vitalentum::vitalentum_tests::vitalentum_test ... ok
 test g4f::codelinkava::codelinkava_tests::codelinkava_test ... ok
-test g4f::aitianhu::aitianhu_tests::aitianhu_test ... ok
+test g4f::wewordle::wewordle_tests::wewordle_test ... ok
+test g4f::chatgptai::chatgptai_tests::chatgptai_test ... ok
+test g4f::yqcloud::yqcloud_tests::yqcloud_test ... ok
+test g4f::chatgptlogin::chatgptai_tests::chatgptai_test ... ok
 test phind::phind_tests::phind_test ... ok
-test g4f::chatgptlogin::chatgptlogin_tests::chatgptlogin_test ... ok
 ```
 
 # Nothing
@@ -53,6 +54,7 @@ static GENERATORS: Lazy<Vec<Arc<dyn Generator + Send + Sync>>> =
         , Arc::new( g4f::chatgptai::ChatgptAiGenerator )
         ]
   });
+
 pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<String> {
   for gen in &*GENERATORS {
     if let Ok(result) = gen.call(msg, fancy, bot_name).await {

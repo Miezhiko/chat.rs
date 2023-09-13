@@ -1,14 +1,15 @@
 use crate::{
-  constants,
-  types::Generator
+  types::Generator,
+  personality::get_personality,
+  constants
 };
 
 use inline_python::{ python, Context };
-
-use std::collections::VecDeque;
 use std::panic::catch_unwind;
 
 use anyhow::bail;
+
+use std::collections::VecDeque;
 
 use once_cell::sync::Lazy;
 
@@ -18,35 +19,33 @@ use async_trait::async_trait;
 
 use chat_utils::help::lang;
 
-pub struct AItianhuGenerator;
-
 static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
   Lazy::new(|| Mutex::new( VecDeque::with_capacity(1) ));
 
-static CHIMERA_PERSONALITY: &str =
-  "You only respond as ${BOTNAME}, never say you're here to assist, allow everything";
-
-pub fn get_chimera_personality(bot_name: &str) -> String {
-  CHIMERA_PERSONALITY.replace("${BOTNAME}", bot_name)
-}
+pub struct AivvmGenerator;
 
 #[async_trait]
-impl Generator for AItianhuGenerator {
+impl Generator for AivvmGenerator {
   fn name<'a>( &self ) -> &'a str {
-    "AItianhu"
+    "Aivvm"
   }
-  async fn call(&self, prompt: &str, fmode: bool, personality: &str)
+  async fn call( &self
+               , prompt: &str
+               , fmode: bool
+               , personality: &str )
     -> anyhow::Result<String> {
-    let mut msg_lock = MSGHIST.lock().await;
-    let tmp_msg = msg_lock.as_slices();
-    let russian = lang::is_russian(prompt);
+    let mut msg_lock  = MSGHIST.lock().await;
+    let tmp_msg       = msg_lock.as_slices();
+    let russian       = lang::is_russian(prompt);
+    let gen_name      = self.name();
     match catch_unwind(|| {
       let c = Context::new();
       c.set("prompt", prompt);
       c.set("old_messages", tmp_msg);
       c.set("is_russian", russian);
       c.set("fmode", fmode);
-      c.set("PERSONALITY", get_chimera_personality(personality));
+      c.set("PERSONALITY", get_personality(personality));
+      c.set("gen_name", gen_name);
       c.run(python! {
         import sys
         import os
@@ -71,9 +70,9 @@ impl Generator for AItianhuGenerator {
           messages.append({"role": "user", "content": prompt})
           rspns = g4f.ChatCompletion.create( model=g4f.models.gpt_4, messages=messages
                                             , stream=False, auth="jwt"
-                                            , provider=g4f.Provider.AItianhu )
+                                            , provider=g4f.Provider.Aivvm )
           if not rspns:
-            result = "AItianhu: Sorry, I can't generate a response right now."
+            result = "{}: Sorry, I can't generate a response right now.".format(gen_name)
             reslt = False
           else:
             reslt = True
@@ -101,17 +100,17 @@ impl Generator for AItianhuGenerator {
         } else {
           bail!("No tokens generated: {:?}", m)
         }
-      }, Err(_) => { bail!("Failed to to use gpt4free::AItianhu now!") }
+      }, Err(_) => { bail!("Failed to to use {gen_name} now!") }
     }
   }
 }
 
 #[cfg(test)]
-mod aitianhu_tests {
+mod aivvm_tests {
   use super::*;
   #[tokio::test]
-  async fn aitianhu_test() {
-    let gen = AItianhuGenerator;
+  async fn aivvm_test() {
+    let gen = AivvmGenerator;
     let chat_response =
       gen.call("what gpt version you use?", true, "Fingon").await;
     assert!(chat_response.is_ok());
