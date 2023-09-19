@@ -22,12 +22,12 @@ use chat_utils::help::lang;
 static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
   Lazy::new(|| Mutex::new( VecDeque::with_capacity(1) ));
 
-pub struct ChatgptLoginGenerator;
+pub struct GptGoGenerator;
 
 #[async_trait]
-impl Generator for ChatgptLoginGenerator {
+impl Generator for GptGoGenerator {
   fn name<'a>( &self ) -> &'a str {
-    "ChatgptLogin"
+    "GptGo"
   }
   async fn call( &self
                , prompt: &str
@@ -68,9 +68,9 @@ impl Generator for ChatgptLoginGenerator {
           messages.append({"role": "user", "content": prompt})
           rspns = g4f.ChatCompletion.create( model=g4f.models.gpt_4, messages=messages
                                             , stream=False, auth="jwt"
-                                            , provider=g4f.Provider.ChatgptLogin )
+                                            , provider=g4f.Provider.GptGo )
           if not rspns:
-            result = "ChatgptLogin: Sorry, I can't generate a response right now."
+            result = "ChatBase: Sorry, I can't generate a response right now."
             reslt = False
           else:
             reslt = True
@@ -98,17 +98,17 @@ impl Generator for ChatgptLoginGenerator {
         } else {
           bail!("No tokens generated: {:?}", m)
         }
-      }, Err(_) => { bail!("Failed to to use ChatgptLogin now!") }
+      }, Err(_) => { bail!("Failed to to use ChatBase now!") }
     }
   }
 }
 
 #[cfg(test)]
-mod chatgptai_tests {
+mod gptgo_tests {
   use super::*;
   #[tokio::test]
-  async fn chatgptai_test() {
-    let gen = ChatgptLoginGenerator;
+  async fn gptgo_test() {
+    let gen = GptGoGenerator;
     let chat_response =
       gen.call("what gpt version you use?", true, "Fingon").await;
     assert!(chat_response.is_ok());
