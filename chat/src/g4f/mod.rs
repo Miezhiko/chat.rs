@@ -4,3 +4,5 @@ pub mod wewordle;
 pub mod chatgptai;
 pub mod chatbase;
 pub mod gptgo;
+pub mod aitianhuspace;
+pub mod myshell;

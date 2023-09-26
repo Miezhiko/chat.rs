@@ -24,18 +24,18 @@ if let Ok(gpt4free_result) =
 # Current state
 
 ```bash
+running 11 tests
 test chimera::chimera_tests::chimera_test ... ignored
-test g4f::chatbase::chatbase_tests::chatbase_test ... ok
-test g4f::deepai::deepai_tests::deepai_test ... ok
-test g4f::aivvm::aivvm_tests::aivvm_test ... ok
-test huggingface::huggingface_tests::huggingface_test ... ok
-test g4f::vitalentum::vitalentum_tests::vitalentum_test ... ok
-test g4f::codelinkava::codelinkava_tests::codelinkava_test ... ok
 test g4f::wewordle::wewordle_tests::wewordle_test ... ok
-test g4f::chatgptai::chatgptai_tests::chatgptai_test ... ok
+test huggingface::huggingface_tests::huggingface_test ... ok
 test g4f::yqcloud::yqcloud_tests::yqcloud_test ... ok
-test g4f::chatgptlogin::chatgptai_tests::chatgptai_test ... ok
+test g4f::deepai::deepai_tests::deepai_test ... ok
+test g4f::gptgo::gptgo_tests::gptgo_test ... ok
+test g4f::aitianhuspace::aitianhuspace_tests::aitianhuspace_test ... ok
+test g4f::chatgptai::chatgptai_tests::chatgptai_test ... ok
+test g4f::myshell::myshell_tests::myshell_test ... ok
 test phind::phind_tests::phind_test ... ok
+test g4f::chatbase::chatbase_tests::chatbase_test ... ok
 ```
 
 # Nothing
@@ -45,13 +45,13 @@ static GENERATORS: Lazy<Vec<Arc<dyn Generator + Send + Sync>>> =
   Lazy::new(|| {
     vec![ Arc::new( g4f::chatbase::ChatBaseGenerator )
         , Arc::new( g4f::wewordle::WewordleGenerator )
+        , Arc::new( g4f::gptgo::GptGoGenerator )
         , Arc::new( g4f::yqcloud::YqcloudGenerator )
-        , Arc::new( g4f::chatgptlogin::ChatgptLoginGenerator )
+        , Arc::new( g4f::myshell::MyshellGenerator )
         , Arc::new( phind::PhindGenerator)
-        , Arc::new( g4f::aitianhu::AItianhuGenerator )
-        , Arc::new( g4f::codelinkava::CodeLinkAvaGenerator )
         , Arc::new( g4f::deepai::DeepAiGenerator )
         , Arc::new( g4f::chatgptai::ChatgptAiGenerator )
+        , Arc::new( g4f::aitianhuspace::AItianhuSpaceGenerator )
         ]
   });
 
