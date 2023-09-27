@@ -23,9 +23,11 @@ static GENERATORS: Lazy<Vec<Arc<dyn Generator + Send + Sync>>> =
   Lazy::new(|| {
     vec![ Arc::new( g4f::chatbase::ChatBaseGenerator )
         , Arc::new( g4f::wewordle::WewordleGenerator )
+        , Arc::new( g4f::chatgptduo::ChatgptDuoGenerator )
         , Arc::new( g4f::gptgo::GptGoGenerator )
         , Arc::new( g4f::yqcloud::YqcloudGenerator )
         , Arc::new( g4f::myshell::MyshellGenerator )
+        , Arc::new( g4f::aibn::AibnGenerator )
         , Arc::new( phind::PhindGenerator)
         , Arc::new( g4f::deepai::DeepAiGenerator )
         , Arc::new( g4f::chatgptai::ChatgptAiGenerator )
