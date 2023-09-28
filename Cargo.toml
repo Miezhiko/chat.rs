@@ -10,7 +10,7 @@ anyhow              = "^1"
 once_cell           = "^1.18"
 
 [workspace.dependencies.tokio]
-features  = ["rt-multi-thread", "signal", "parking_lot", "macros", "fs", "sync"]
+features  = ["rt-multi-thread", "sync", "macros"]
 version   = "^1.32"
 workspace = true
 
