@@ -49,7 +49,9 @@ pub async fn generate(msg: &str, bot_name: &str, fancy: bool) -> anyhow::Result<
 
   for gen in &*GENERATORS {
     if let Ok(result) = gen.call(msg, fmode, bot_name).await {
-      return Ok(result);
+      if !result.contains("502: Bad gateway") {
+        return Ok(result);
+      }
     }
   }
 
