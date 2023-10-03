@@ -8,7 +8,6 @@ mod constants;
 pub mod types;
 pub mod g4f;
 pub mod chimera;
-pub mod phind;
 pub mod huggingface;
 
 use crate::types::Generator;
@@ -28,7 +27,7 @@ static GENERATORS: Lazy<Vec<Arc<dyn Generator + Send + Sync>>> =
         , Arc::new( g4f::yqcloud::YqcloudGenerator )
         , Arc::new( g4f::myshell::MyshellGenerator )
         , Arc::new( g4f::aibn::AibnGenerator )
-        , Arc::new( phind::PhindGenerator)
+        , Arc::new( g4f::phind::PhindGenerator)
         , Arc::new( g4f::deepai::DeepAiGenerator )
         , Arc::new( g4f::chatgptai::ChatgptAiGenerator )
         , Arc::new( g4f::aitianhuspace::AItianhuSpaceGenerator )
