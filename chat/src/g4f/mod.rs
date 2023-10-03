@@ -9,3 +9,5 @@ pub mod myshell;
 pub mod aibn;
 pub mod chatgptduo;
 pub mod phind;
+pub mod ylokh;
+pub mod freegpt;
