@@ -22,12 +22,12 @@ use chat_utils::help::lang;
 static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
   Lazy::new(|| Mutex::new( VecDeque::with_capacity(1) ));
 
-pub struct GptGoGenerator;
+pub struct GptForLoveGenerator;
 
 #[async_trait]
-impl Generator for GptGoGenerator {
+impl Generator for GptForLoveGenerator {
   fn name<'a>( &self ) -> &'a str {
-    "GptGo"
+    "GptForLove"
   }
   async fn call( &self
                , prompt: &str
@@ -68,9 +68,9 @@ impl Generator for GptGoGenerator {
           messages.append({"role": "user", "content": prompt})
           rspns = g4f.ChatCompletion.create( model=g4f.models.gpt_4, messages=messages
                                             , stream=False, auth="jwt"
-                                            , provider=g4f.Provider.GptGo )
+                                            , provider=g4f.Provider.GptForLove )
           if not rspns:
-            result = "GptGo: Sorry, I can't generate a response right now."
+            result = "GptForLove: Sorry, I can't generate a response right now."
             reslt = False
           else:
             reslt = True
@@ -104,11 +104,11 @@ impl Generator for GptGoGenerator {
 }
 
 #[cfg(test)]
-mod gptgo_tests {
+mod gptforlove_tests {
   use super::*;
   #[tokio::test]
-  async fn gptgo_test() {
-    let gen = GptGoGenerator;
+  async fn gptforlove_test() {
+    let gen = GptForLoveGenerator;
     let chat_response =
       gen.call("what gpt version you use?", true, "Fingon").await;
     assert!(chat_response.is_ok());

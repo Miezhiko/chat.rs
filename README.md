@@ -31,6 +31,7 @@ static GENERATORS: Lazy<Vec<Arc<dyn Generator + Send + Sync>>> =
         , Arc::new( g4f::chatgptduo::ChatgptDuoGenerator )
         , Arc::new( g4f::ylokh::YlokhGenerator )
         , Arc::new( g4f::gptgo::GptGoGenerator )
+        , Arc::new( g4f::gptgod::GptGodGenerator )
         , Arc::new( g4f::yqcloud::YqcloudGenerator )
         , Arc::new( g4f::myshell::MyshellGenerator )
         , Arc::new( g4f::aibn::AibnGenerator )
@@ -39,6 +40,7 @@ static GENERATORS: Lazy<Vec<Arc<dyn Generator + Send + Sync>>> =
         , Arc::new( g4f::freegpt::FreeGptGenerator )
         , Arc::new( g4f::chatgptai::ChatgptAiGenerator )
         , Arc::new( g4f::aitianhuspace::AItianhuSpaceGenerator )
+        , Arc::new( g4f::gptforlove::GptForLoveGenerator )
         ]
   });
 
