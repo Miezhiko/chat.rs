@@ -1,10 +1,6 @@
-pub mod deepai;
-pub mod yqcloud;
 pub mod chatgptai;
 pub mod chatbase;
 pub mod gptgod;
-pub mod aitianhuspace;
-pub mod myshell;
 pub mod aibn;
 pub mod phind;
 pub mod ylokh;
