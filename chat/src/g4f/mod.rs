@@ -4,3 +4,4 @@ pub mod gptgod;
 pub mod phind;
 pub mod freegpt;
 pub mod gptforlove;
+pub mod noowai;
