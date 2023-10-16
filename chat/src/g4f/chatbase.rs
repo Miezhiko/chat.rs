@@ -73,8 +73,11 @@ impl Generator for ChatBaseGenerator {
             result = "ChatBase: Sorry, I can't generate a response right now."
             reslt = False
           else:
-            reslt = True
             result = rspns
+            if "support@chatbase.co" in rspns:
+              reslt = False
+            else:
+              reslt = True
         except OSError as err:
           result = ("OS Error! {0}".format(err))
           reslt = False
