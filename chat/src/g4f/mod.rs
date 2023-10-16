@@ -5,3 +5,5 @@ pub mod phind;
 pub mod freegpt;
 pub mod gptforlove;
 pub mod noowai;
+pub mod liaobots;
+pub mod geekgpt;
