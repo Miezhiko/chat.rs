@@ -76,6 +76,8 @@ impl Generator for ChatBaseGenerator {
             result = rspns
             if "support@chatbase.co" in rspns:
               reslt = False
+            elif "Chatbase" in rspns:
+              reslt = False
             else:
               reslt = True
         except OSError as err:
