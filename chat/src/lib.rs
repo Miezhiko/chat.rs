@@ -20,12 +20,12 @@ use once_cell::sync::Lazy;
 
 static GENERATORS: Lazy<Vec<Arc<dyn Generator + Send + Sync>>> =
   Lazy::new(|| {
-    vec![ Arc::new( g4f::chatbase::ChatBaseGenerator )
-        , Arc::new( g4f::gptforlove::GptForLoveGenerator )
+    vec![ Arc::new( g4f::gptforlove::GptForLoveGenerator )
         , Arc::new( g4f::chatgptai::ChatgptAiGenerator )
-        , Arc::new( g4f::llama2::Llama2Generator )
-        , Arc::new( g4f::myshell::MyShellGenerator )
         , Arc::new( g4f::freegpt::FreeGptGenerator )
+        , Arc::new( g4f::myshell::MyShellGenerator )
+        , Arc::new( g4f::llama2::Llama2Generator )
+        , Arc::new( g4f::chatbase::ChatBaseGenerator )
         , Arc::new( huggingface::HuggingFaceGenerator )
         ]
   });
