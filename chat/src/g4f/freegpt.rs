@@ -29,6 +29,9 @@ impl Generator for FreeGptGenerator {
   fn name<'a>( &self ) -> &'a str {
     "FreeGpt"
   }
+  fn enabled_for_multigen( &self ) -> bool {
+    false
+  }
   async fn call( &self
                , prompt: &str
                , fmode: bool

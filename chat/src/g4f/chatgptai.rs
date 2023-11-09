@@ -29,6 +29,9 @@ impl Generator for ChatgptAiGenerator {
   fn name<'a>( &self ) -> &'a str {
     "ChatgptAi"
   }
+  fn enabled_for_multigen( &self ) -> bool {
+    true
+  }
   async fn call( &self
                , prompt: &str
                , fmode: bool

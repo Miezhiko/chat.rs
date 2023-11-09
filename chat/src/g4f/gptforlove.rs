@@ -22,6 +22,9 @@ impl Generator for GptForLoveGenerator {
   fn name<'a>( &self ) -> &'a str {
     "GptForLove"
   }
+  fn enabled_for_multigen( &self ) -> bool {
+    false
+  }
   async fn call( &self
                , prompt: &str
                , fmode: bool

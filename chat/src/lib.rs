@@ -20,10 +20,10 @@ use once_cell::sync::Lazy;
 
 static GENERATORS: Lazy<Vec<Arc<dyn Generator + Send + Sync>>> =
   Lazy::new(|| {
-    vec![ Arc::new( g4f::gptforlove::GptForLoveGenerator )
-        , Arc::new( g4f::chatgptai::ChatgptAiGenerator )
-        , Arc::new( g4f::freegpt::FreeGptGenerator )
+    vec![ Arc::new( g4f::chatgptai::ChatgptAiGenerator )
         , Arc::new( g4f::llama2::Llama2Generator )
+        , Arc::new( g4f::freegpt::FreeGptGenerator )
+        , Arc::new( g4f::gptforlove::GptForLoveGenerator )
         , Arc::new( huggingface::HuggingFaceGenerator )
         ]
   });
@@ -65,9 +65,11 @@ pub async fn generate_all<'a>(msg: &str, bot_name: &str, fancy: bool)
     };
 
   let genz = (&*GENERATORS).into_iter().map(
-    |gen| async move { ( gen.name()
-                       , gen.call(msg, fmode, bot_name).await )
-                     }
+    |gen| async move { ( gen.name(),
+      if gen.enabled_for_multigen()
+             { gen.call(msg, fmode, bot_name).await }
+        else { anyhow::Ok(String::from("disabled")) } )
+    }
   );
 
   future::join_all(genz).await
