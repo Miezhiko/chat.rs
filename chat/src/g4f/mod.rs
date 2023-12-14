@@ -1,2 +1,2 @@
-pub mod chatgptai;
 pub mod llama2;
+pub mod mixtral;

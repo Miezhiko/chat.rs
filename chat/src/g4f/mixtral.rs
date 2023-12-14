@@ -22,12 +22,12 @@ use chat_utils::help::lang;
 static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
   Lazy::new(|| Mutex::new( VecDeque::with_capacity(1) ));
 
-pub struct ChatgptAiGenerator;
+pub struct MixtralGenerator;
 
 #[async_trait]
-impl Generator for ChatgptAiGenerator {
+impl Generator for MixtralGenerator {
   fn name<'a>( &self ) -> &'a str {
-    "ChatgptAi"
+    "Mixtral"
   }
   fn enabled_for_multigen( &self ) -> bool {
     true
@@ -69,11 +69,11 @@ impl Generator for ChatgptAiGenerator {
               messages.append({"role": "assistant", "content": tup[1]})
         try:
           messages.append({"role": "user", "content": prompt})
-          rspns = g4f.ChatCompletion.create( model=g4f.models.gpt_4, messages=messages
-                                            , stream=False, auth="jwt"
-                                            , provider=g4f.Provider.ChatgptAi )
+          rspns = g4f.ChatCompletion.create( model=g4f.models.mixtral_8x7b, messages=messages
+                                           , stream=False, auth="jwt"
+                                           , provider=g4f.Provider.HuggingChat )
           if not rspns:
-            result = "ChatgptAi: Sorry, I can't generate a response right now."
+            result = "Mixtral: Sorry, I can't generate a response right now."
             reslt = False
           else:
             result = rspns
@@ -101,17 +101,17 @@ impl Generator for ChatgptAiGenerator {
         } else {
           bail!("No tokens generated: {:?}", m)
         }
-      }, Err(_) => { bail!("Failed to to use ChatgptAi now!") }
+      }, Err(_) => { bail!("Failed to to use Mixtral now!") }
     }
   }
 }
 
 #[cfg(test)]
-mod chatgptai_tests {
+mod mixtral_tests {
   use super::*;
   #[tokio::test]
-  async fn chatgptai_test() {
-    let gen = ChatgptAiGenerator;
+  async fn mixtral_test() {
+    let gen = MixtralGenerator;
     let chat_response =
       gen.call("what gpt version you use?", true, "Fingon").await;
     assert!(chat_response.is_ok());

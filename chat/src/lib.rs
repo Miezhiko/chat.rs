@@ -20,8 +20,8 @@ use once_cell::sync::Lazy;
 
 static GENERATORS: Lazy<Vec<Arc<dyn Generator + Send + Sync>>> =
   Lazy::new(|| {
-    vec![ Arc::new( g4f::chatgptai::ChatgptAiGenerator )
-        , Arc::new( g4f::llama2::Llama2Generator )
+    vec![ Arc::new( g4f::llama2::Llama2Generator )
+        , Arc::new( g4f::mixtral::MixtralGenerator )
         , Arc::new( huggingface::HuggingFaceGenerator )
         ]
   });
@@ -62,7 +62,7 @@ pub async fn generate_all<'a>(msg: &str, bot_name: &str, fancy: bool)
       false
     };
 
-  let genz = (&*GENERATORS).into_iter().map(
+  let genz = GENERATORS.iter().map(
     |gen| async move { ( gen.name(),
       if gen.enabled_for_multigen()
              { gen.call(msg, fmode, bot_name).await }
