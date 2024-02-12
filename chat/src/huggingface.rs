@@ -22,6 +22,7 @@ impl Generator for HuggingFaceGenerator {
                , _fmode: bool
                , _personality: &str )
     -> anyhow::Result<String> {
+    #[allow(clippy::blocks_in_conditions)]
     match catch_unwind(|| {
       let c = Context::new();
       c.set("prompt", prompt);

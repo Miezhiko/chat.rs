@@ -40,6 +40,7 @@ impl Generator for Llama2Generator {
     let mut msg_lock = MSGHIST.lock().await;
     let tmp_msg = msg_lock.as_slices();
     let russian = lang::is_russian(prompt);
+    #[allow(clippy::blocks_in_conditions)]
     match catch_unwind(|| {
       let c = Context::new();
       c.set("prompt", prompt);

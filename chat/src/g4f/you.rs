@@ -22,12 +22,12 @@ use chat_utils::help::lang;
 static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
   Lazy::new(|| Mutex::new( VecDeque::with_capacity(1) ));
 
-pub struct MixtralCodeGenerator;
+pub struct YouGenerator;
 
 #[async_trait]
-impl Generator for MixtralCodeGenerator {
+impl Generator for YouGenerator {
   fn name<'a>( &self ) -> &'a str {
-    "MixtralCode"
+    "You"
   }
   fn enabled_for_multigen( &self ) -> bool {
     true
@@ -70,12 +70,11 @@ impl Generator for MixtralCodeGenerator {
               messages.append({"role": "assistant", "content": tup[1]})
         try:
           messages.append({"role": "user", "content": prompt})
-          rspns = g4f.ChatCompletion.create( model=g4f.models.codellama_70b_instruct
-                                           , messages=messages
+          rspns = g4f.ChatCompletion.create( model=g4f.models.gpt_4, messages=messages
                                            , stream=False, auth="jwt"
-                                           , provider=g4f.Provider.HuggingChat )
+                                           , provider=g4f.Provider.You )
           if not rspns:
-            result = "Mixtral code: Sorry, I can't generate a response right now."
+            result = "You: Sorry, I can't generate a response right now."
             reslt = False
           else:
             result = rspns
@@ -103,17 +102,17 @@ impl Generator for MixtralCodeGenerator {
         } else {
           bail!("No tokens generated: {:?}", m)
         }
-      }, Err(_) => { bail!("Failed to to use Mixtral code now!") }
+      }, Err(_) => { bail!("Failed to to use You now!") }
     }
   }
 }
 
 #[cfg(test)]
-mod mixtral_code_tests {
+mod you_tests {
   use super::*;
   #[tokio::test]
-  async fn mixtral_code_test() {
-    let gen = MixtralCodeGenerator;
+  async fn you_test() {
+    let gen = YouGenerator;
     let chat_response =
       gen.call("what gpt version you use?", true, "Fingon").await;
     assert!(chat_response.is_ok());
