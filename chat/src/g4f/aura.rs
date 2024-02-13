@@ -29,6 +29,9 @@ impl Generator for AuraGenerator {
   fn name<'a>( &self ) -> &'a str {
     "Aura"
   }
+  fn enabled( &self ) -> bool {
+    true
+  }
   fn enabled_for_multigen( &self ) -> bool {
     true
   }

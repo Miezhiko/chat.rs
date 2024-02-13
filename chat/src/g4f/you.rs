@@ -29,6 +29,9 @@ impl Generator for YouGenerator {
   fn name<'a>( &self ) -> &'a str {
     "You"
   }
+  fn enabled( &self ) -> bool {
+    true
+  }
   fn enabled_for_multigen( &self ) -> bool {
     true
   }

@@ -29,6 +29,9 @@ impl Generator for MixtralGenerator {
   fn name<'a>( &self ) -> &'a str {
     "Mixtral"
   }
+  fn enabled( &self ) -> bool {
+    true
+  }
   fn enabled_for_multigen( &self ) -> bool {
     true
   }

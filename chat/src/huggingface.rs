@@ -14,6 +14,9 @@ impl Generator for HuggingFaceGenerator {
   fn name<'a>( &self ) -> &'a str {
     "HuggingFace"
   }
+  fn enabled( &self ) -> bool {
+    false
+  }
   fn enabled_for_multigen( &self ) -> bool {
     false
   }

@@ -29,6 +29,9 @@ impl Generator for Llama2Generator {
   fn name<'a>( &self ) -> &'a str {
     "Llama2"
   }
+  fn enabled( &self ) -> bool {
+    true
+  }
   fn enabled_for_multigen( &self ) -> bool {
     true
   }
