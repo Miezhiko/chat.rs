@@ -30,10 +30,10 @@ impl Generator for MixtralGenerator {
     "Mixtral"
   }
   fn enabled( &self ) -> bool {
-    true
+    false
   }
   fn enabled_for_multigen( &self ) -> bool {
-    true
+    false
   }
   async fn call( &self
                , prompt: &str
