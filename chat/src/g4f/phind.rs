@@ -1,6 +1,5 @@
 use crate::{
   types::Generator,
-  personality::get_personality,
   constants
 };
 
@@ -22,12 +21,12 @@ use chat_utils::help::lang;
 static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
   Lazy::new(|| Mutex::new( VecDeque::with_capacity(1) ));
 
-pub struct AuraGenerator;
+pub struct PhindGenerator;
 
 #[async_trait]
-impl Generator for AuraGenerator {
+impl Generator for PhindGenerator {
   fn name<'a>( &self ) -> &'a str {
-    "Aura"
+    "Phind"
   }
   fn enabled( &self ) -> bool {
     true
@@ -38,7 +37,7 @@ impl Generator for AuraGenerator {
   async fn call( &self
                , prompt: &str
                , fmode: bool
-               , personality: &str )
+               , _personality: &str )
     -> anyhow::Result<String> {
     let mut msg_lock = MSGHIST.lock().await;
     let tmp_msg = msg_lock.as_slices();
@@ -50,17 +49,13 @@ impl Generator for AuraGenerator {
       c.set("old_messages", tmp_msg);
       c.set("is_russian", russian);
       c.set("fmode", fmode);
-      c.set("PERSONALITY", get_personality(personality));
       c.run(python! {
         import sys
         import os
         import g4f
   
         result = ""
-        if fmode:
-          systemContext = PERSONALITY
-        else:
-          systemContext = "You are a helpful assistant"
+        systemContext = "You are a helpful assistant"
         if is_russian:
           systemContext += ", you reply in Russian, you don't provide Translation"
         else:
@@ -74,10 +69,10 @@ impl Generator for AuraGenerator {
         try:
           messages.append({"role": "user", "content": prompt})
           rspns = g4f.ChatCompletion.create( model=g4f.models.gpt_4, messages=messages
-                                           , stream=False, auth="jwt"
-                                           , provider=g4f.Provider.Aura )
+                                           , stream=False, auth="cookies"
+                                           , provider=g4f.Provider.Phind )
           if not rspns:
-            result = "Aura: Sorry, I can't generate a response right now."
+            result = "Phind: Sorry, I can't generate a response right now."
             reslt = False
           else:
             result = rspns
@@ -105,19 +100,19 @@ impl Generator for AuraGenerator {
         } else {
           bail!("No tokens generated: {:?}", m)
         }
-      }, Err(_) => { bail!("Failed to to use Aura now!") }
+      }, Err(_) => { bail!("Failed to to use Phind now!") }
     }
   }
 }
 
 #[cfg(test)]
-mod aura_tests {
+mod phind_tests {
   use super::*;
   #[tokio::test]
-  async fn aura_test() {
-    let gen = AuraGenerator;
+  async fn phind_test() {
+    let gen = PhindGenerator;
     let chat_response =
-      gen.call("what gpt version you use?", true, "Fingon").await;
+      gen.call("what gpt version you use?", false, "Fingon").await;
     assert!(chat_response.is_ok());
     assert!(!chat_response.unwrap().contains("is not working"));
   }
