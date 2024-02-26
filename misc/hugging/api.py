@@ -13,14 +13,10 @@ client = InferenceClient(token=htoken)
 
 output = None
 
-output = client.conversational("Write usage example for std atomic in C++")
+output = client.text_generation(
+  "Write usage example for std atomic in C++"
+  , model="google/gemma-7b-it"
+  , max_new_tokens=1000
+  , stream=False)
 
-print(output["generated_text"])
-
-if output is not None:
-  output = client.conversational("repeat my question"
-                                , generated_responses=output["conversation"]["generated_responses"]
-                                , past_user_inputs=output["conversation"]["past_user_inputs"]
-                                )
-
-print(output["generated_text"])
+print(output)

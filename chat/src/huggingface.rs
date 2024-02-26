@@ -15,10 +15,10 @@ impl Generator for HuggingFaceGenerator {
     "HuggingFace"
   }
   fn enabled( &self ) -> bool {
-    false
+    true
   }
   fn enabled_for_multigen( &self ) -> bool {
-    false
+    true
   }
   async fn call( &self
                , prompt: &str
@@ -42,13 +42,17 @@ impl Generator for HuggingFaceGenerator {
         client = InferenceClient(token=htoken)
         reslt = False
         try:
-          rspns = client.conversational(prompt)
+          rspns = client.text_generation(
+            prompt
+            , model="google/gemma-7b-it"
+            , max_new_tokens=1000
+            , stream=False)
 
           if not rspns:
             result = "huggingface: Sorry, I can't generate a response right now."
           else:
             reslt = True
-            result = rspns["generated_text"]
+            result = rspns
         except OSError as err:
           result = ("OS Error! {0}".format(err))
         except RuntimeError as err:
