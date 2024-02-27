@@ -7,67 +7,92 @@ use anyhow::bail;
 
 use async_trait::async_trait;
 
-pub struct HuggingFaceGenerator;
+async fn generate( prompt: &str
+                 , model: &str ) -> anyhow::Result<String> {
+  #[allow(clippy::blocks_in_conditions)]
+  match catch_unwind(|| {
+    let c = Context::new();
+    c.set("prompt", prompt);
+    c.set("model", model);
+    c.run(python! {
+      from huggingface_hub import InferenceClient
+      import os
+      if os.path.isfile("/etc/chat.rs/hugging.txt"):
+          file_path = "/etc/chat.rs/hugging.txt"
+      else:
+          file_path = "hugging.txt"
+      with open(file_path, "r") as file:
+        htoken = file.readline().strip()
+      client = InferenceClient(token=htoken)
+      reslt = False
+      try:
+        rspns = client.text_generation(
+          prompt
+          , model=model
+          , max_new_tokens=1000
+          , stream=False)
+        if not rspns:
+          result = "huggingface: Sorry, I can't generate a response right now."
+        else:
+          reslt = True
+          result = rspns
+      except OSError as err:
+        result = ("OS Error! {0}".format(err))
+      except RuntimeError as err:
+        result = ("Runtime Error! {0}".format(err))
+    }); ( c.get::<bool>("reslt")
+        , c.get::<String>("result") )
+  }) {
+    Ok((r,m)) => {
+      if r {
+        Ok(m)
+      } else {
+        bail!("No tokens generated: {:?}", m)
+      }
+    }, Err(_) => { bail!("Failed to to use huggingface now!") }
+  }
+}
+
+pub struct HuggingFaceGeneratorGemma;
+pub struct HuggingFaceGeneratorLlama;
+pub struct HuggingFaceGeneratorBloom;
 
 #[async_trait]
-impl Generator for HuggingFaceGenerator {
-  fn name<'a>( &self ) -> &'a str {
-    "HuggingFace"
-  }
-  fn enabled( &self ) -> bool {
-    true
-  }
-  fn enabled_for_multigen( &self ) -> bool {
-    true
-  }
+impl Generator for HuggingFaceGeneratorGemma {
+  fn name<'a>( &self )              -> &'a str { "HuggingFaceGeneratorGemma" }
+  fn enabled( &self )               -> bool { true }
+  fn enabled_for_multigen( &self )  -> bool { true }
   async fn call( &self
                , prompt: &str
                , _fmode: bool
-               , _personality: &str )
-    -> anyhow::Result<String> {
-    #[allow(clippy::blocks_in_conditions)]
-    match catch_unwind(|| {
-      let c = Context::new();
-      c.set("prompt", prompt);
-      c.run(python! {
-        from huggingface_hub import InferenceClient
-        import os
-      
-        if os.path.isfile("/etc/chat.rs/hugging.txt"):
-            file_path = "/etc/chat.rs/hugging.txt"
-        else:
-            file_path = "hugging.txt"
-        with open(file_path, "r") as file:
-          htoken = file.readline().strip()
-        client = InferenceClient(token=htoken)
-        reslt = False
-        try:
-          rspns = client.text_generation(
-            prompt
-            , model="google/gemma-7b-it"
-            , max_new_tokens=1000
-            , stream=False)
+               , _personality: &str ) -> anyhow::Result<String> {
+    generate(prompt, "google/gemma-7b-it").await
+  }
+}
 
-          if not rspns:
-            result = "huggingface: Sorry, I can't generate a response right now."
-          else:
-            reslt = True
-            result = rspns
-        except OSError as err:
-          result = ("OS Error! {0}".format(err))
-        except RuntimeError as err:
-          result = ("Runtime Error! {0}".format(err))
-      }); ( c.get::<bool>("reslt")
-          , c.get::<String>("result") )
-    }) {
-      Ok((r,m)) => {
-        if r {
-          Ok(m)
-        } else {
-          bail!("No tokens generated: {:?}", m)
-        }
-      }, Err(_) => { bail!("Failed to to use huggingface now!") }
-    }
+#[async_trait]
+impl Generator for HuggingFaceGeneratorLlama {
+  fn name<'a>( &self )              -> &'a str { "HuggingFaceGeneratorLlama" }
+  fn enabled( &self )               -> bool { true }
+  fn enabled_for_multigen( &self )  -> bool { true }
+  async fn call( &self
+               , prompt: &str
+               , _fmode: bool
+               , _personality: &str ) -> anyhow::Result<String> {
+    generate(prompt, "meta-llama/Llama-2-7b-chat-hf").await
+  }
+}
+
+#[async_trait]
+impl Generator for HuggingFaceGeneratorBloom {
+  fn name<'a>( &self )              -> &'a str { "HuggingFaceGeneratorBloom" }
+  fn enabled( &self )               -> bool { true }
+  fn enabled_for_multigen( &self )  -> bool { true }
+  async fn call( &self
+               , prompt: &str
+               , _fmode: bool
+               , _personality: &str ) -> anyhow::Result<String> {
+    generate(prompt, "bigscience/bloom").await
   }
 }
 
@@ -76,7 +101,7 @@ mod huggingface_tests {
   use super::*;
   #[tokio::test]
   async fn huggingface_tests() {
-    let gen = HuggingFaceGenerator;
+    let gen = HuggingFaceGeneratorGemma;
     let chat_response =
       gen.call("what gpt version you use?", true, "Fingon").await;
     assert!(chat_response.is_ok());
