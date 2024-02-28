@@ -54,7 +54,8 @@ async fn generate( prompt: &str
 }
 
 pub struct HuggingFaceGeneratorGemma;
-pub struct HuggingFaceGeneratorLlama;
+pub struct HuggingFaceGeneratorMixtral;
+pub struct HuggingFaceGeneratorZephyr;
 pub struct HuggingFaceGeneratorBloom;
 
 #[async_trait]
@@ -71,15 +72,28 @@ impl Generator for HuggingFaceGeneratorGemma {
 }
 
 #[async_trait]
-impl Generator for HuggingFaceGeneratorLlama {
-  fn name<'a>( &self )              -> &'a str { "HuggingFaceGeneratorLlama" }
+impl Generator for HuggingFaceGeneratorMixtral {
+  fn name<'a>( &self )              -> &'a str { "HuggingFaceGeneratorMixtral" }
   fn enabled( &self )               -> bool { true }
   fn enabled_for_multigen( &self )  -> bool { true }
   async fn call( &self
                , prompt: &str
                , _fmode: bool
                , _personality: &str ) -> anyhow::Result<String> {
-    generate(prompt, "meta-llama/Llama-2-7b-chat-hf").await
+    generate(prompt, "mistralai/Mixtral-8x7B-Instruct-v0.1").await
+  }
+}
+
+#[async_trait]
+impl Generator for HuggingFaceGeneratorZephyr {
+  fn name<'a>( &self )              -> &'a str { "HuggingFaceGeneratorZephyr" }
+  fn enabled( &self )               -> bool { true }
+  fn enabled_for_multigen( &self )  -> bool { true }
+  async fn call( &self
+               , prompt: &str
+               , _fmode: bool
+               , _personality: &str ) -> anyhow::Result<String> {
+    generate(prompt, "HuggingFaceH4/zephyr-7b-beta").await
   }
 }
 

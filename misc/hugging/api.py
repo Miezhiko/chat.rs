@@ -15,8 +15,8 @@ output = None
 
 output = client.text_generation(
   "Write usage example for std atomic in C++"
-  , model="google/gemma-7b-it"
-  , max_new_tokens=1000
+  , model="databricks/dolly-v2-12b"
+  , max_new_tokens=250
   , stream=False)
 
 print(output)
