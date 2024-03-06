@@ -19,9 +19,9 @@ use once_cell::sync::Lazy;
 
 static GENERATORS: Lazy<Vec<Arc<dyn Generator + Send + Sync>>> =
   Lazy::new(|| {
-    vec![ Arc::new( huggingface::HuggingFaceGeneratorGemma    )
+    vec![ Arc::new( g4f::flow::FlowGptGenerator               )
+        , Arc::new( huggingface::HuggingFaceGeneratorGemma    )
         , Arc::new( huggingface::HuggingFaceGeneratorMixtral  )
-        , Arc::new( g4f::you::YouGenerator                    )
         , Arc::new( huggingface::HuggingFaceGeneratorZephyr   )
         , Arc::new( huggingface::HuggingFaceGeneratorBloom    )
         ]

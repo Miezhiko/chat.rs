@@ -22,12 +22,12 @@ use chat_utils::help::lang;
 static MSGHIST: Lazy<Mutex<VecDeque<(String, String)>>> =
   Lazy::new(|| Mutex::new( VecDeque::with_capacity(1) ));
 
-pub struct YouGenerator;
+pub struct FlowGptGenerator;
 
 #[async_trait]
-impl Generator for YouGenerator {
+impl Generator for FlowGptGenerator {
   fn name<'a>( &self ) -> &'a str {
-    "You"
+    "FlowGpt"
   }
   fn enabled( &self ) -> bool {
     true
@@ -73,11 +73,11 @@ impl Generator for YouGenerator {
               messages.append({"role": "assistant", "content": tup[1]})
         try:
           messages.append({"role": "user", "content": prompt})
-          rspns = g4f.ChatCompletion.create( model=g4f.models.gpt_4, messages=messages
+          rspns = g4f.ChatCompletion.create( model="gpt-3.5-turbo", messages=messages
                                            , stream=False, auth="jwt"
-                                           , provider=g4f.Provider.You )
+                                           , provider=g4f.Provider.FlowGpt )
           if not rspns:
-            result = "You: Sorry, I can't generate a response right now."
+            result = "FlowGpt: Sorry, I can't generate a response right now."
             reslt = False
           else:
             result = rspns
@@ -105,17 +105,17 @@ impl Generator for YouGenerator {
         } else {
           bail!("No tokens generated: {:?}", m)
         }
-      }, Err(_) => { bail!("Failed to to use You now!") }
+      }, Err(_) => { bail!("Failed to to use FlowGpt now!") }
     }
   }
 }
 
 #[cfg(test)]
-mod you_tests {
+mod flow_tests {
   use super::*;
   #[tokio::test]
-  async fn you_test() {
-    let gen = YouGenerator;
+  async fn flow_test() {
+    let gen = FlowGptGenerator;
     let chat_response =
       gen.call("what gpt version you use?", true, "Fingon").await;
     assert!(chat_response.is_ok());
